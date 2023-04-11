@@ -1,0 +1,40 @@
+* Han Yuan 袁晗
+
+Assistant Professor
+
+School of Business
+
+Sun Yat-sen University
+
+Panyu, Guangzhou
+
+Email: yuanh58 # mail.sysu.edu.cn
+
+
+** Research Interests
+Industrial Organization, Quantitative Marketing, Digital Economy
+
+** Employment
+- 2021.7–Current Assistant Professor, School of Business, Sun Yat-sen University
+- 2020.12–2021.6 Resident Scholar, Luohan Academy, Alibaba
+
+** Education
+- 2016-2021, PhD in Economics, The University of Arizona
+- 2014-2016, MPhil in Economics, The Chinese University of Hong Kong
+- 2010-2014, BSc in Economics, Zhejiang University
+** Publication
+1. Xiao, Mo and Yuan, Han. (2023) [[./files/政策驱动型创新——来自中国的研究.pdf][Policy-Driven Innovation: The Case of China]]. Quarterly Journal of Economics and Management (《经济管理学刊》)
+2. Yuan, Han. (2016). [[./files/Yuan - 2016 - Measuring media bias in China.pdf][Measuring Media Bias in China]]. China Economic Review, 38, pp. 49-59
+
+** Working Papers
+1. [[./files/competing_for_time_Han.pdf][Competing for Time: A Study of Mobile Applications]] (R&R at International Economic Review)
+2. Editorial Recommendations and Product Discovery: Evidence from Apple App Store (with Duan Keran , Liu Yong , Zhang Xi) (draft available upon request)
+
+** Research in Progress
+1. Content Curation (with Dou Wenyu, Wu Jintao, Chen Yuxin)
+2. Trailers or Spoilers? --A Study of Movie Derivative Works
+3. Jump-starting New Products on an E-commerce Platform (with Gao Xijie)
+
+[[./files/cv_2023.pdf][CV]]
+
+Last updated: April 2023
