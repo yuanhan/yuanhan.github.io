@@ -1,15 +1,22 @@
-* Han Yuan 袁晗
+#+html_head: <!-- Google tag (gtag.js) -->  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VSN5JQYJDY"></script> <script>   window.dataLayer = window.dataLayer || [];  function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());   gtag('config', 'G-VSN5JQYJDY'); </script>
+#+HTML_HEAD: <style type="text/css"> <!--/*--><![CDATA[/*><!--*/ .title { display: none; } /*]]>*/--> </style>
+#+HTML_HEAD: <style type="text/css"> <!--/*--><![CDATA[/*><!--*/ .author { display: none; } /*]]>*/--> </style>
 
+#+TITLE: Han Yuan 袁晗
+#+OPTIONS: toc:nil
+#+OPTIONS: num:nil
+** Han Yuan 袁晗
 Assistant Professor
 
 School of Business
 
 Sun Yat-sen University
 
-Panyu, Guangzhou
+Panyu, Guangzhou, China
 
-Email: yuanh58 # mail.sysu.edu.cn
+Email: yuanh58 # mail.sysu.edu.cn | yuanhan1992 # gmail.com
 
+Official Website: https://bus.sysu.edu.cn/en/teacher/YuanHan
 
 ** Research Interests
 Industrial Organization, Quantitative Marketing, Digital Economy
@@ -36,5 +43,3 @@ Industrial Organization, Quantitative Marketing, Digital Economy
 3. Jump-starting New Products on an E-commerce Platform (with Gao Xijie)
 
 [[./files/cv_2023.pdf][CV]]
-
-Last updated: April 2023

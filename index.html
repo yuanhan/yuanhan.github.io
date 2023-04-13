@@ -1,57 +1,348 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="author" content="Han Yuan" />
-  <title>index.tmpPmOk6J</title>
-  <style>
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-  </style>
+<!-- 2023-04-13 Thu 09:59 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Han Yuan 袁晗</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Han Yuan" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<!-- Google tag (gtag.js) -->  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VSN5JQYJDY"></script> <script>   window.dataLayer = window.dataLayer || [];  function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());   gtag('config', 'G-VSN5JQYJDY'); </script>
+<style type="text/css"> <!--/*--><![CDATA[/*><!--*/ .title { display: none; } /*]]>*/--> </style>
+<style type="text/css"> <!--/*--><![CDATA[/*><!--*/ .author { display: none; } /*]]>*/--> </style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
 </head>
 <body>
-<h1 id="han-yuan-袁晗">Han Yuan 袁晗</h1>
-<p>Assistant Professor</p>
-<p>School of Business</p>
-<p>Sun Yat-sen University</p>
-<p>Panyu, Guangzhou</p>
-<p>Email: yuanh58 # mail.sysu.edu.cn</p>
-<h2 id="research-interests">Research Interests</h2>
-<p>Industrial Organization, Quantitative Marketing, Digital Economy</p>
-<h2 id="employment">Employment</h2>
-<ul>
+<div id="content">
+<h1 class="title">Han Yuan 袁晗</h1>
+<div id="outline-container-org0e9df78" class="outline-2">
+<h2 id="org0e9df78">Han Yuan 袁晗</h2>
+<div class="outline-text-2" id="text-org0e9df78">
+<p>
+Assistant Professor
+</p>
+
+<p>
+School of Business
+</p>
+
+<p>
+Sun Yat-sen University
+</p>
+
+<p>
+Panyu, Guangzhou, China
+</p>
+
+<p>
+Email: yuanh58 # mail.sysu.edu.cn | yuanhan1992 # gmail.com
+</p>
+
+<p>
+Official Website: <a href="https://bus.sysu.edu.cn/en/teacher/YuanHan">https://bus.sysu.edu.cn/en/teacher/YuanHan</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org96cc846" class="outline-2">
+<h2 id="org96cc846">Research Interests</h2>
+<div class="outline-text-2" id="text-org96cc846">
+<p>
+Industrial Organization, Quantitative Marketing, Digital Economy
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2bb7e7c" class="outline-2">
+<h2 id="org2bb7e7c">Employment</h2>
+<div class="outline-text-2" id="text-org2bb7e7c">
+<ul class="org-ul">
 <li>2021.7–Current Assistant Professor, School of Business, Sun Yat-sen University</li>
 <li>2020.12–2021.6 Resident Scholar, Luohan Academy, Alibaba</li>
 </ul>
-<h2 id="education">Education</h2>
-<ul>
+</div>
+</div>
+
+<div id="outline-container-org1289065" class="outline-2">
+<h2 id="org1289065">Education</h2>
+<div class="outline-text-2" id="text-org1289065">
+<ul class="org-ul">
 <li>2016-2021, PhD in Economics, The University of Arizona</li>
 <li>2014-2016, MPhil in Economics, The Chinese University of Hong Kong</li>
 <li>2010-2014, BSc in Economics, Zhejiang University</li>
 </ul>
-<h2 id="publication">Publication</h2>
-<ol>
+</div>
+</div>
+<div id="outline-container-org57c2381" class="outline-2">
+<h2 id="org57c2381">Publication</h2>
+<div class="outline-text-2" id="text-org57c2381">
+<ol class="org-ol">
 <li>Xiao, Mo and Yuan, Han. (2023) <a href="./files/政策驱动型创新——来自中国的研究.pdf">Policy-Driven Innovation: The Case of China</a>. Quarterly Journal of Economics and Management (《经济管理学刊》)</li>
 <li>Yuan, Han. (2016). <a href="./files/Yuan - 2016 - Measuring media bias in China.pdf">Measuring Media Bias in China</a>. China Economic Review, 38, pp. 49-59</li>
 </ol>
-<h2 id="working-papers">Working Papers</h2>
-<ol>
-<li><a href="./files/competing_for_time_Han.pdf">Competing for Time: A Study of Mobile Applications</a>(R&amp;R at International Economic Review)</li>
+</div>
+</div>
+
+<div id="outline-container-orgddd6944" class="outline-2">
+<h2 id="orgddd6944">Working Papers</h2>
+<div class="outline-text-2" id="text-orgddd6944">
+<ol class="org-ol">
+<li><a href="./files/competing_for_time_Han.pdf">Competing for Time: A Study of Mobile Applications</a> (R&amp;R at International Economic Review)</li>
 <li>Editorial Recommendations and Product Discovery: Evidence from Apple App Store (with Duan Keran , Liu Yong , Zhang Xi) (draft available upon request)</li>
 </ol>
-<h2 id="research-in-progress">Research in Progress</h2>
-<ol>
+</div>
+</div>
+
+<div id="outline-container-org7cf4fea" class="outline-2">
+<h2 id="org7cf4fea">Research in Progress</h2>
+<div class="outline-text-2" id="text-org7cf4fea">
+<ol class="org-ol">
 <li>Content Curation (with Dou Wenyu, Wu Jintao, Chen Yuxin)</li>
-<li>Trailers or Spoilers? –A Study of Movie Derivative Works</li>
+<li>Trailers or Spoilers? &#x2013;A Study of Movie Derivative Works</li>
 <li>Jump-starting New Products on an E-commerce Platform (with Gao Xijie)</li>
 </ol>
-<p><a href="./files/cv_2023.pdf">CV</a></p>
-<p>Last updated: April 2023</p>
+
+<p>
+<a href="./files/cv_2023.pdf">CV</a>
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Han Yuan</p>
+<p class="date">Created: 2023-04-13 Thu 09:59</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
 </body>
 </html>
