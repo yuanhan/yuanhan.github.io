@@ -1,4 +1,4 @@
-#+html_head: <!-- Google tag (gtag.js) -->  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VSN5JQYJDY"></script> <script>   window.dataLayer = window.dataLayer || [];  function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());   gtag('config', 'G-VSN5JQYJDY'); </script>
+#+html_head: <!-- Google tag (gtag.js) -->  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QSS9TLNLC"></script> <script>   window.dataLayer = window.dataLayer || [];  function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());   gtag('config', 'G-7QSS9TLNLC'); </script>
 #+HTML_HEAD: <style type="text/css"> <!--/*--><![CDATA[/*><!--*/ .title { display: none; } /*]]>*/--> </style>
 #+HTML_HEAD: <style type="text/css"> <!--/*--><![CDATA[/*><!--*/ .author { display: none; } /*]]>*/--> </style>
 
