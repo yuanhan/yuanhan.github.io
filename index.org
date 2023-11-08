@@ -8,15 +8,15 @@
 ** Han Yuan 袁晗
 Assistant Professor
 
-School of Business
+College of Business
 
-Sun Yat-sen University
+Shanghai University of Finance and Economics
 
-Panyu, Guangzhou, China
+Yangpu, Shanghai, China
 
-Email: yuanh58 # mail.sysu.edu.cn | yuanhan1992 # gmail.com
+Email: yuanhan1992 # gmail.com
 
-Official Website: https://bus.sysu.edu.cn/en/teacher/YuanHan
+Official Website: https://cob.sufe.edu.cn/Teacher/Detail/236
 
 ** Research Interests
 Industrial Organization, Quantitative Marketing, Digital Economy
@@ -34,7 +34,7 @@ Industrial Organization, Quantitative Marketing, Digital Economy
 2. Yuan, Han. (2016). [[./files/Yuan - 2016 - Measuring media bias in China.pdf][Measuring Media Bias in China]]. China Economic Review, 38, pp. 49-59
 
 ** Working Papers
-1. [[./files/competing_for_time_Han.pdf][Competing for Time: A Study of Mobile Applications]] (R&R at International Economic Review)
+1. [[./files/competing_for_time_Han.pdf][Competing for Time: A Study of Mobile Applications]] (Reject & Resubmit at International Economic Review)
 2. Editorial Recommendations and Product Discovery: Evidence from Apple App Store (with Duan Keran , Liu Yong , Zhang Xi) (draft available upon request)
 
 ** Research in Progress
