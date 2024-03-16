@@ -41,6 +41,5 @@ Industrial Organization, Quantitative Marketing, Digital Economy
 ** Research in Progress
 1. Content Curation (with Dou Wenyu, Wu Jintao, Chen Yuxin)
 2. Trailers or Spoilers? --A Study of Movie Derivative Works
-3. Jump-starting New Products on an E-commerce Platform (with Gao Xijie)
 
-[[./files/cv_2023.pdf][CV]]
+[[./files/cv.pdf][CV]]
