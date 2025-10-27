@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive App Interoperability Network</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        #controls {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            border: 2px solid #4CAF50;
+            background-color: white;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+        button.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #graph {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .control-group {
+            display: inline-block;
+            margin-right: 30px;
+            margin-bottom: 10px;
+        }
+        .control-label {
+            font-weight: bold;
+            margin-right: 10px;
+            color: #666;
+        }
+        .legend {
+            margin-top: 8px;
+            color: #666;
+        }
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 20px;
+            margin-top: 6px;
+        }
+        .legend-swatch {
+            width: 14px;
+            height: 14px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            display: inline-block;
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive App Interoperability Network - Top 50 Apps</h1>
+    <div id="controls">
+        <div class="control-group">
+            <span class="control-label">Language:</span>
+            <button id="btn-chinese" class="active" onclick="switchLanguage('chinese')">中文 Chinese</button>
+            <button id="btn-english" onclick="switchLanguage('english')">English</button>
+        </div>
+        <div class="control-group">
+            <span class="control-label">Layout:</span>
+            <button id="btn-ownership" class="active" onclick="switchLayout('ownership')">Ownership Layout</button>
+            <button id="btn-interop" onclick="switchLayout('interop')">Interoperability Layout</button>
+        </div>
+        <div class="control-group">
+            <span class="control-label">Network:</span>
+            <button id="btn-net-interop" class="active" onclick="switchNetwork('interop')">Interoperability Network</button>
+            <button id="btn-net-ownership" onclick="switchNetwork('ownership')">Ownership Network</button>
+        </div>
+        <div class="control-group">
+            <button onclick="resetHighlight()" style="border-color: #FF5722;">Reset Highlight</button>
+        </div>
+    </div>
+    <div id="legend" class="legend">
+        <div class="legend-item"><span class="legend-swatch" style="background:#FF9800"></span>Selected node</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#2ecc71"></span>Incoming (to selected)</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#e74c3c"></span>Outgoing (from selected)</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#8e44ad"></span>Two-way with selected</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#add8e6"></span>Other nodes</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:rgba(150,150,150,0.3)"></span>Other edges</div>
+    </div>
+    <div id="graph"></div>
+    <script>
+        // Data
+        const nodes = ["com.tencent.mm", "com.ss.android.ugc.aweme", "com.taobao.taobao", "com.sohu.inputmethod.sogou", "com.tencent.mobileqq", "com.eg.android.AlipayGphone", "com.baidu.searchbox", "com.autonavi.minimap", "com.baidu.input", "com.xunmeng.pinduoduo", "com.smile.gifmaker", "com.sina.weibo", "com.baidu.BaiduMap", "com.qiyi.video", "com.tencent.mtt", "com.ss.android.article.news", "com.tencent.qqlive", "com.UCMobile", "com.tencent.news", "com.jingdong.app.mall", "com.sankuai.meituan", "com.tencent.qqmusic", "com.youku.phone", "com.moji.mjweather", "cn.wps.moffice_eng", "com.hunantv.imgo.activity", "com.snda.wifilocating", "com.alibaba.android.rimet", "tv.danmaku.bili", "com.ss.android.article.video", "cn.kuwo.player", "com.tencent.qqpimsecure", "com.greenpoint.android.mc10086.activity", "com.tencent.wework", "com.iflytek.inputmethod", "com.xingin.xhs"];
+        const nodeIndices = {"com.tencent.mm": 0, "com.ss.android.ugc.aweme": 1, "com.taobao.taobao": 2, "com.sohu.inputmethod.sogou": 3, "com.tencent.mobileqq": 4, "com.eg.android.AlipayGphone": 5, "com.baidu.searchbox": 6, "com.autonavi.minimap": 7, "com.baidu.input": 8, "com.xunmeng.pinduoduo": 9, "com.smile.gifmaker": 10, "com.sina.weibo": 11, "com.baidu.BaiduMap": 12, "com.qiyi.video": 13, "com.tencent.mtt": 14, "com.ss.android.article.news": 15, "com.tencent.qqlive": 16, "com.UCMobile": 17, "com.tencent.news": 18, "com.jingdong.app.mall": 19, "com.sankuai.meituan": 20, "com.tencent.qqmusic": 21, "com.youku.phone": 22, "com.moji.mjweather": 23, "cn.wps.moffice_eng": 24, "com.hunantv.imgo.activity": 25, "com.snda.wifilocating": 26, "com.alibaba.android.rimet": 27, "tv.danmaku.bili": 28, "com.ss.android.article.video": 29, "cn.kuwo.player": 30, "com.tencent.qqpimsecure": 31, "com.greenpoint.android.mc10086.activity": 32, "com.tencent.wework": 33, "com.iflytek.inputmethod": 34, "com.xingin.xhs": 35};
+        const labelsChinese = ["\u5fae\u4fe1", "\u6296\u97f3\u77ed\u89c6\u9891", "\u624b\u673a\u6dd8\u5b9d", "\u641c\u72d7\u8f93\u5165\u6cd5", "QQ", "\u652f\u4ed8\u5b9d", "\u767e\u5ea6", "\u9ad8\u5fb7\u5730\u56fe", "\u767e\u5ea6\u8f93\u5165\u6cd5", "\u62fc\u591a\u591a", "\u5feb\u624b", "\u65b0\u6d6a\u5fae\u535a", "\u767e\u5ea6\u5730\u56fe", "\u7231\u5947\u827a", "QQ\u6d4f\u89c8\u5668", "\u4eca\u65e5\u5934\u6761", "\u817e\u8baf\u89c6\u9891", "UC\u6d4f\u89c8\u5668", "\u817e\u8baf\u65b0\u95fb", "\u4eac\u4e1c", "\u7f8e\u56e2", "QQ\u97f3\u4e50", "\u4f18\u9177", "\u58a8\u8ff9\u5929\u6c14", "WPS OFFICE", "\u8292\u679cTV", "WiFi\u4e07\u80fd\u94a5\u5319", "\u9489\u9489", "\u54d4\u54e9\u54d4\u54e9", "\u897f\u74dc\u89c6\u9891", "\u9177\u6211\u97f3\u4e50", "\u817e\u8baf\u624b\u673a\u7ba1\u5bb6", "\u4e2d\u56fd\u79fb\u52a8\u624b\u673a\u8425\u4e1a\u5385", "\u4f01\u4e1a\u5fae\u4fe1", "\u8baf\u98de\u8f93\u5165\u6cd5", "\u5c0f\u7ea2\u4e66"];
+        const labelsEnglish = ["WeChat", "Tik Tok", "Taobao", "Sougou Input", "QQ", "Alipay", "Baidu", "Amap", "Baidu Input", "Pinduoduo", "Kuaishou", "Weibo", "Baidu Map", "iQiyi", "QQ Browser", "Toutiao", "Tencent Video", "UC Browser", "Tencent News", "JD", "Meituan", "QQ Music", "Youku", "Moji Weather", "WPS", "imgo TV", "WiFi Key", "DingTalk", "Bilibili", "Xigua Video", "Kuwo Music", "Tencent Phone Manager", "China Mobile", "WeWork", "IFlytek Input", "RedNote"];
+        const nodeSizes = [40.0, 37.52013902891612, 34.760849663294245, 32.57163004439972, 31.76293860425466, 31.074077368043096, 31.068776818507246, 30.62767114292545, 30.168235323728346, 29.8168972432956, 29.703784986003484, 29.6825177682521, 28.281990889544783, 26.038980336987226, 25.941308684985856, 25.7994791045151, 24.580247056919042, 24.151157074324793, 22.187788861612937, 20.958059773708946, 19.027256116681087, 17.82769157427974, 17.70260202118481, 15.52599046923514, 15.158524713015176, 14.008562535198296, 13.780053642396037, 13.7335281106527, 13.729048811475222, 13.356745742413596, 13.316527014443183, 12.343749707165152, 11.289887879042128, 10.37837377260829, 10.235013339505434, 10.0];
+        const hoverTextsStatic = ["<b>\u5fae\u4fe1 / WeChat</b><br>Package: com.tencent.mm<br>Active Devices: 4,233,879.58<br>In-degree: 24<br>Out-degree: 16<br>Click to highlight connections", "<b>\u6296\u97f3\u77ed\u89c6\u9891 / Tik Tok</b><br>Package: com.ss.android.ugc.aweme<br>Active Devices: 3,468,790.14<br>In-degree: 10<br>Out-degree: 9<br>Click to highlight connections", "<b>\u624b\u673a\u6dd8\u5b9d / Taobao</b><br>Package: com.taobao.taobao<br>Active Devices: 2,778,842.88<br>In-degree: 4<br>Out-degree: 12<br>Click to highlight connections", "<b>\u641c\u72d7\u8f93\u5165\u6cd5 / Sougou Input</b><br>Package: com.sohu.inputmethod.sogou<br>Active Devices: 2,330,496.48<br>In-degree: 0<br>Out-degree: 5<br>Click to highlight connections", "<b>QQ / QQ</b><br>Package: com.tencent.mobileqq<br>Active Devices: 2,183,839.76<br>In-degree: 21<br>Out-degree: 0<br>Click to highlight connections", "<b>\u652f\u4ed8\u5b9d / Alipay</b><br>Package: com.eg.android.AlipayGphone<br>Active Devices: 2,066,216.4<br>In-degree: 22<br>Out-degree: 0<br>Click to highlight connections", "<b>\u767e\u5ea6 / Baidu</b><br>Package: com.baidu.searchbox<br>Active Devices: 2,065,336.34<br>In-degree: 4<br>Out-degree: 3<br>Click to highlight connections", "<b>\u9ad8\u5fb7\u5730\u56fe / Amap</b><br>Package: com.autonavi.minimap<br>Active Devices: 1,993,397.11<br>In-degree: 7<br>Out-degree: 5<br>Click to highlight connections", "<b>\u767e\u5ea6\u8f93\u5165\u6cd5 / Baidu Input</b><br>Package: com.baidu.input<br>Active Devices: 1,921,131.27<br>In-degree: 0<br>Out-degree: 7<br>Click to highlight connections", "<b>\u62fc\u591a\u591a / Pinduoduo</b><br>Package: com.xunmeng.pinduoduo<br>Active Devices: 1,867,641.22<br>In-degree: 2<br>Out-degree: 3<br>Click to highlight connections", "<b>\u5feb\u624b / Kuaishou</b><br>Package: com.smile.gifmaker<br>Active Devices: 1,850,739.2<br>In-degree: 5<br>Out-degree: 8<br>Click to highlight connections", "<b>\u65b0\u6d6a\u5fae\u535a / Weibo</b><br>Package: com.sina.weibo<br>Active Devices: 1,847,578.43<br>In-degree: 17<br>Out-degree: 0<br>Click to highlight connections", "<b>\u767e\u5ea6\u5730\u56fe / Baidu Map</b><br>Package: com.baidu.BaiduMap<br>Active Devices: 1,650,885.5<br>In-degree: 6<br>Out-degree: 3<br>Click to highlight connections", "<b>\u7231\u5947\u827a / iQiyi</b><br>Package: com.qiyi.video<br>Active Devices: 1,378,554.05<br>In-degree: 0<br>Out-degree: 2<br>Click to highlight connections", "<b>QQ\u6d4f\u89c8\u5668 / QQ Browser</b><br>Package: com.tencent.mtt<br>Active Devices: 1,367,774.59<br>In-degree: 3<br>Out-degree: 0<br>Click to highlight connections", "<b>\u4eca\u65e5\u5934\u6761 / Toutiao</b><br>Package: com.ss.android.article.news<br>Active Devices: 1,352,271.56<br>In-degree: 1<br>Out-degree: 5<br>Click to highlight connections", "<b>\u817e\u8baf\u89c6\u9891 / Tencent Video</b><br>Package: com.tencent.qqlive<br>Active Devices: 1,226,044.24<br>In-degree: 1<br>Out-degree: 3<br>Click to highlight connections", "<b>UC\u6d4f\u89c8\u5668 / UC Browser</b><br>Package: com.UCMobile<br>Active Devices: 1,184,482.33<br>In-degree: 3<br>Out-degree: 5<br>Click to highlight connections", "<b>\u817e\u8baf\u65b0\u95fb / Tencent News</b><br>Package: com.tencent.news<br>Active Devices: 1,011,571.16<br>In-degree: 1<br>Out-degree: 1<br>Click to highlight connections", "<b>\u4eac\u4e1c / JD</b><br>Package: com.jingdong.app.mall<br>Active Devices: 916,372.93<br>In-degree: 2<br>Out-degree: 6<br>Click to highlight connections", "<b>\u7f8e\u56e2 / Meituan</b><br>Package: com.sankuai.meituan<br>Active Devices: 784,651.42<br>In-degree: 2<br>Out-degree: 5<br>Click to highlight connections", "<b>QQ\u97f3\u4e50 / QQ Music</b><br>Package: com.tencent.qqmusic<br>Active Devices: 712,533.8<br>In-degree: 1<br>Out-degree: 1<br>Click to highlight connections", "<b>\u4f18\u9177 / Youku</b><br>Package: com.youku.phone<br>Active Devices: 705,406.03<br>In-degree: 2<br>Out-degree: 7<br>Click to highlight connections", "<b>\u58a8\u8ff9\u5929\u6c14 / Moji Weather</b><br>Package: com.moji.mjweather<br>Active Devices: 592,193.49<br>In-degree: 0<br>Out-degree: 4<br>Click to highlight connections", "<b>WPS OFFICE / WPS</b><br>Package: cn.wps.moffice_eng<br>Active Devices: 574,959.27<br>In-degree: 0<br>Out-degree: 6<br>Click to highlight connections", "<b>\u8292\u679cTV / imgo TV</b><br>Package: com.hunantv.imgo.activity<br>Active Devices: 524,200.17<br>In-degree: 0<br>Out-degree: 3<br>Click to highlight connections", "<b>WiFi\u4e07\u80fd\u94a5\u5319 / WiFi Key</b><br>Package: com.snda.wifilocating<br>Active Devices: 514,660.64<br>In-degree: 0<br>Out-degree: 0<br>Click to highlight connections", "<b>\u9489\u9489 / DingTalk</b><br>Package: com.alibaba.android.rimet<br>Active Devices: 512,739.72<br>In-degree: 6<br>Out-degree: 9<br>Click to highlight connections", "<b>\u54d4\u54e9\u54d4\u54e9 / Bilibili</b><br>Package: tv.danmaku.bili<br>Active Devices: 512,555.16<br>In-degree: 3<br>Out-degree: 2<br>Click to highlight connections", "<b>\u897f\u74dc\u89c6\u9891 / Xigua Video</b><br>Package: com.ss.android.article.video<br>Active Devices: 497,445.16<br>In-degree: 2<br>Out-degree: 5<br>Click to highlight connections", "<b>\u9177\u6211\u97f3\u4e50 / Kuwo Music</b><br>Package: cn.kuwo.player<br>Active Devices: 495,839.77<br>In-degree: 0<br>Out-degree: 0<br>Click to highlight connections", "<b>\u817e\u8baf\u624b\u673a\u7ba1\u5bb6 / Tencent Phone Manager</b><br>Package: com.tencent.qqpimsecure<br>Active Devices: 458,549.41<br>In-degree: 2<br>Out-degree: 0<br>Click to highlight connections", "<b>\u4e2d\u56fd\u79fb\u52a8\u624b\u673a\u8425\u4e1a\u5385 / China Mobile</b><br>Package: com.greenpoint.android.mc10086.activity<br>Active Devices: 421,308.89<br>In-degree: 1<br>Out-degree: 1<br>Click to highlight connections", "<b>\u4f01\u4e1a\u5fae\u4fe1 / WeWork</b><br>Package: com.tencent.wework<br>Active Devices: 391,546.92<br>In-degree: 3<br>Out-degree: 7<br>Click to highlight connections", "<b>\u8baf\u98de\u8f93\u5165\u6cd5 / IFlytek Input</b><br>Package: com.iflytek.inputmethod<br>Active Devices: 387,061.3<br>In-degree: 0<br>Out-degree: 6<br>Click to highlight connections", "<b>\u5c0f\u7ea2\u4e66 / RedNote</b><br>Package: com.xingin.xhs<br>Active Devices: 379,818.84<br>In-degree: 4<br>Out-degree: 10<br>Click to highlight connections"];
+        // Positions
+        const posOwnership = [[1.117566798835938, 1.3462766122922791], [0.43418214138781674, -3.0351146973906356], [-1.8438929491559777, -0.9741837350074758], [1.6009801943082447, 1.07579299800321], [1.8092870949212012, 0.5421314955316849], [-2.175180456030835, -0.2135503669600775], [0.3084716085852438, 3.7013854050508868], [-2.7597387068293884, 0.2150015998918469], [-0.537845361069572, 3.634947917659938], [0.6111028041272614, 1.0114377923689393], [0.34944724306618635, 1.6562408097771497], [-1.383911590911357, -1.7056851461808202], [1.143915050969119, 3.49062752383096], [-1.3390634533120696, 2.7209049206564013], [1.168772980597031, 0.5174205614422511], [-0.5041672493981283, -3.090809105192958], [0.048418139755396924, 0.9841490880415013], [-1.8911553497776392, 0.8187753504085294], [0.47888529966907745, 0.20724541457697543], [0.5673554568911702, -0.5280785983312818], [-0.6361415664208265, 0.30669001637420956], [1.6345364538081775, -0.6126485327509426], [-2.330004369117354, 0.8888419782920207], [-2.8519434956765086, -0.44720086120413166], [2.0400344324577633, -0.026968075764095878], [-2.620032526425716, -1.0569945091056807], [-0.3223257906477416, -1.8283941482241435], [-2.1396312154658457, -1.527917681616288], [-0.46109579118134053, -0.4209529125465432], [0.08292627148231714, -5.0], [0.5963387482634827, -1.1630816595084792], [1.1762459479951493, -0.9021565659564508], [3.88581777137786, -0.9501556734002792], [1.2637574336632476, -0.17941955579395566], [4.040745133731112, 0.6063305960593998], [-0.5626571344724947, -0.060888255323945435]];
+        const posInterop = [[-0.5051089095152625, 0.5911623283639001], [0.25520520745022873, 2.2983471420505266], [1.3148440311042318, -2.3025792666089226], [1.387077820275811, 3.2655236613149867], [-0.17727802702248927, -0.029919289285668105], [0.3809161660222489, 0.052448997601389366], [3.273492415162127, 0.22061134151701509], [-1.759776868581872, -0.7792346492835686], [1.92971724752267, 2.687923072426048], [-0.5654415127103536, 3.6544550795312754], [1.9764068528474577, 0.9597201196836932], [0.5727451391977196, -0.47513648147643794], [-2.006539769530403, 0.9083889674581144], [1.481511399695311, 5.0], [-2.74624181587718, 1.7737653362233028], [-1.6969216592762477, 3.21346331868566], [-3.1199958447365246, 2.631120497424503], [-1.6528270224635944, -3.930769519404573], [-4.349958052435243, 1.7690158147012474], [0.16369301020792312, -2.234003736333], [-3.4761370243146406, -0.06563949295473288], [2.0662096048722742, -4.7658158789087945], [0.18238856969744335, -3.993720038187833], [-2.5780992687321955, -2.292305217465418], [-2.633026256120678, -2.304565001083582], [1.2763549752493304, 3.975981966743998], [-0.4551764350598228, -2.5812807527292154], [-1.3527938781771907, -2.4102025483957217], [2.517102341050298, -1.761957605117832], [3.2537452318453655, 2.140954735798779], [1.310764115609367, -2.269850818577891], [0.6083149426124578, -1.1100109665517925], [4.496548606637116, -3.3462564999519135], [-3.0680033739787014, -1.034030382644737], [1.5409684233684184, 3.001860622581398], [2.1553196181046, -0.45746485714421115]];
+        // Edges and degree info
+        const edgesInterop = [["com.tencent.mm", "com.ss.android.ugc.aweme"], ["com.tencent.mm", "com.tencent.mobileqq"], ["com.tencent.mm", "com.baidu.searchbox"], ["com.tencent.mm", "com.autonavi.minimap"], ["com.tencent.mm", "com.xunmeng.pinduoduo"], ["com.tencent.mm", "com.smile.gifmaker"], ["com.tencent.mm", "com.baidu.BaiduMap"], ["com.tencent.mm", "com.tencent.mtt"], ["com.tencent.mm", "com.tencent.qqlive"], ["com.tencent.mm", "com.tencent.news"], ["com.tencent.mm", "com.jingdong.app.mall"], ["com.tencent.mm", "com.sankuai.meituan"], ["com.tencent.mm", "tv.danmaku.bili"], ["com.tencent.mm", "com.tencent.qqpimsecure"], ["com.tencent.mm", "com.tencent.wework"], ["com.tencent.mm", "com.xingin.xhs"], ["com.ss.android.ugc.aweme", "com.tencent.mm"], ["com.ss.android.ugc.aweme", "com.tencent.mobileqq"], ["com.ss.android.ugc.aweme", "com.eg.android.AlipayGphone"], ["com.ss.android.ugc.aweme", "com.autonavi.minimap"], ["com.ss.android.ugc.aweme", "com.sina.weibo"], ["com.ss.android.ugc.aweme", "com.baidu.BaiduMap"], ["com.ss.android.ugc.aweme", "com.tencent.mtt"], ["com.ss.android.ugc.aweme", "com.ss.android.article.news"], ["com.ss.android.ugc.aweme", "com.ss.android.article.video"], ["com.taobao.taobao", "com.tencent.mm"], ["com.taobao.taobao", "com.tencent.mobileqq"], ["com.taobao.taobao", "com.eg.android.AlipayGphone"], ["com.taobao.taobao", "com.baidu.searchbox"], ["com.taobao.taobao", "com.autonavi.minimap"], ["com.taobao.taobao", "com.smile.gifmaker"], ["com.taobao.taobao", "com.sina.weibo"], ["com.taobao.taobao", "com.UCMobile"], ["com.taobao.taobao", "com.sankuai.meituan"], ["com.taobao.taobao", "com.youku.phone"], ["com.taobao.taobao", "com.alibaba.android.rimet"], ["com.taobao.taobao", "com.greenpoint.android.mc10086.activity"], ["com.sohu.inputmethod.sogou", "com.tencent.mm"], ["com.sohu.inputmethod.sogou", "com.ss.android.ugc.aweme"], ["com.sohu.inputmethod.sogou", "com.tencent.mobileqq"], ["com.sohu.inputmethod.sogou", "com.eg.android.AlipayGphone"], ["com.sohu.inputmethod.sogou", "com.sina.weibo"], ["com.baidu.searchbox", "com.tencent.mm"], ["com.baidu.searchbox", "com.eg.android.AlipayGphone"], ["com.baidu.searchbox", "com.sina.weibo"], ["com.autonavi.minimap", "com.tencent.mm"], ["com.autonavi.minimap", "com.tencent.mobileqq"], ["com.autonavi.minimap", "com.eg.android.AlipayGphone"], ["com.autonavi.minimap", "com.sina.weibo"], ["com.autonavi.minimap", "com.alibaba.android.rimet"], ["com.baidu.input", "com.tencent.mm"], ["com.baidu.input", "com.ss.android.ugc.aweme"], ["com.baidu.input", "com.tencent.mobileqq"], ["com.baidu.input", "com.baidu.searchbox"], ["com.baidu.input", "com.smile.gifmaker"], ["com.baidu.input", "com.sina.weibo"], ["com.baidu.input", "com.xingin.xhs"], ["com.xunmeng.pinduoduo", "com.tencent.mm"], ["com.xunmeng.pinduoduo", "com.tencent.mobileqq"], ["com.xunmeng.pinduoduo", "com.eg.android.AlipayGphone"], ["com.smile.gifmaker", "com.tencent.mm"], ["com.smile.gifmaker", "com.ss.android.ugc.aweme"], ["com.smile.gifmaker", "com.taobao.taobao"], ["com.smile.gifmaker", "com.tencent.mobileqq"], ["com.smile.gifmaker", "com.eg.android.AlipayGphone"], ["com.smile.gifmaker", "com.baidu.searchbox"], ["com.smile.gifmaker", "com.xunmeng.pinduoduo"], ["com.smile.gifmaker", "com.sina.weibo"], ["com.baidu.BaiduMap", "com.tencent.mm"], ["com.baidu.BaiduMap", "com.eg.android.AlipayGphone"], ["com.baidu.BaiduMap", "com.xingin.xhs"], ["com.qiyi.video", "com.ss.android.ugc.aweme"], ["com.qiyi.video", "com.eg.android.AlipayGphone"], ["com.ss.android.article.news", "com.tencent.mm"], ["com.ss.android.article.news", "com.ss.android.ugc.aweme"], ["com.ss.android.article.news", "com.tencent.mobileqq"], ["com.ss.android.article.news", "com.eg.android.AlipayGphone"], ["com.ss.android.article.news", "com.alibaba.android.rimet"], ["com.tencent.qqlive", "com.tencent.mm"], ["com.tencent.qqlive", "com.tencent.mobileqq"], ["com.tencent.qqlive", "com.tencent.wework"], ["com.UCMobile", "com.tencent.mm"], ["com.UCMobile", "com.tencent.mobileqq"], ["com.UCMobile", "com.eg.android.AlipayGphone"], ["com.UCMobile", "com.sina.weibo"], ["com.UCMobile", "com.alibaba.android.rimet"], ["com.tencent.news", "com.tencent.mm"], ["com.jingdong.app.mall", "com.tencent.mm"], ["com.jingdong.app.mall", "com.tencent.mobileqq"], ["com.jingdong.app.mall", "com.autonavi.minimap"], ["com.jingdong.app.mall", "com.sina.weibo"], ["com.jingdong.app.mall", "com.baidu.BaiduMap"], ["com.jingdong.app.mall", "tv.danmaku.bili"], ["com.sankuai.meituan", "com.tencent.mm"], ["com.sankuai.meituan", "com.tencent.mobileqq"], ["com.sankuai.meituan", "com.eg.android.AlipayGphone"], ["com.sankuai.meituan", "com.autonavi.minimap"], ["com.sankuai.meituan", "com.baidu.BaiduMap"], ["com.tencent.qqmusic", "com.xingin.xhs"], ["com.youku.phone", "com.tencent.mm"], ["com.youku.phone", "com.taobao.taobao"], ["com.youku.phone", "com.tencent.mobileqq"], ["com.youku.phone", "com.eg.android.AlipayGphone"], ["com.youku.phone", "com.sina.weibo"], ["com.youku.phone", "com.UCMobile"], ["com.youku.phone", "com.alibaba.android.rimet"], ["com.moji.mjweather", "com.tencent.mm"], ["com.moji.mjweather", "com.tencent.mobileqq"], ["com.moji.mjweather", "com.eg.android.AlipayGphone"], ["com.moji.mjweather", "com.sina.weibo"], ["cn.wps.moffice_eng", "com.tencent.mm"], ["cn.wps.moffice_eng", "com.tencent.mobileqq"], ["cn.wps.moffice_eng", "com.eg.android.AlipayGphone"], ["cn.wps.moffice_eng", "com.sina.weibo"], ["cn.wps.moffice_eng", "com.alibaba.android.rimet"], ["cn.wps.moffice_eng", "com.tencent.wework"], ["com.hunantv.imgo.activity", "com.tencent.mm"], ["com.hunantv.imgo.activity", "com.ss.android.ugc.aweme"], ["com.hunantv.imgo.activity", "com.eg.android.AlipayGphone"], ["com.alibaba.android.rimet", "com.tencent.mm"], ["com.alibaba.android.rimet", "com.taobao.taobao"], ["com.alibaba.android.rimet", "com.tencent.mobileqq"], ["com.alibaba.android.rimet", "com.eg.android.AlipayGphone"], ["com.alibaba.android.rimet", "com.autonavi.minimap"], ["com.alibaba.android.rimet", "com.sina.weibo"], ["com.alibaba.android.rimet", "com.baidu.BaiduMap"], ["com.alibaba.android.rimet", "com.UCMobile"], ["com.alibaba.android.rimet", "com.youku.phone"], ["tv.danmaku.bili", "com.eg.android.AlipayGphone"], ["tv.danmaku.bili", "com.sina.weibo"], ["com.ss.android.article.video", "com.tencent.mm"], ["com.ss.android.article.video", "com.ss.android.ugc.aweme"], ["com.ss.android.article.video", "com.tencent.mobileqq"], ["com.ss.android.article.video", "com.eg.android.AlipayGphone"], ["com.ss.android.article.video", "com.sina.weibo"], ["com.greenpoint.android.mc10086.activity", "com.eg.android.AlipayGphone"], ["com.tencent.wework", "com.tencent.mm"], ["com.tencent.wework", "com.tencent.mobileqq"], ["com.tencent.wework", "com.autonavi.minimap"], ["com.tencent.wework", "com.baidu.BaiduMap"], ["com.tencent.wework", "com.tencent.mtt"], ["com.tencent.wework", "com.tencent.qqmusic"], ["com.tencent.wework", "com.tencent.qqpimsecure"], ["com.iflytek.inputmethod", "com.tencent.mm"], ["com.iflytek.inputmethod", "com.ss.android.ugc.aweme"], ["com.iflytek.inputmethod", "com.tencent.mobileqq"], ["com.iflytek.inputmethod", "com.eg.android.AlipayGphone"], ["com.iflytek.inputmethod", "com.smile.gifmaker"], ["com.iflytek.inputmethod", "com.sina.weibo"], ["com.xingin.xhs", "com.tencent.mm"], ["com.xingin.xhs", "com.ss.android.ugc.aweme"], ["com.xingin.xhs", "com.taobao.taobao"], ["com.xingin.xhs", "com.tencent.mobileqq"], ["com.xingin.xhs", "com.eg.android.AlipayGphone"], ["com.xingin.xhs", "com.smile.gifmaker"], ["com.xingin.xhs", "com.sina.weibo"], ["com.xingin.xhs", "com.jingdong.app.mall"], ["com.xingin.xhs", "tv.danmaku.bili"], ["com.xingin.xhs", "com.ss.android.article.video"]];
+        const edgesOwnership = [["com.tencent.mm", "com.sohu.inputmethod.sogou"], ["com.tencent.mm", "com.tencent.mobileqq"], ["com.tencent.mm", "com.xunmeng.pinduoduo"], ["com.tencent.mm", "com.smile.gifmaker"], ["com.tencent.mm", "com.tencent.mtt"], ["com.tencent.mm", "com.tencent.qqlive"], ["com.tencent.mm", "com.tencent.news"], ["com.tencent.mm", "com.jingdong.app.mall"], ["com.tencent.mm", "com.sankuai.meituan"], ["com.tencent.mm", "com.tencent.qqmusic"], ["com.tencent.mm", "cn.wps.moffice_eng"], ["com.tencent.mm", "tv.danmaku.bili"], ["com.tencent.mm", "cn.kuwo.player"], ["com.tencent.mm", "com.tencent.qqpimsecure"], ["com.tencent.mm", "com.tencent.wework"], ["com.tencent.mm", "com.xingin.xhs"], ["com.ss.android.ugc.aweme", "com.sina.weibo"], ["com.ss.android.ugc.aweme", "com.ss.android.article.news"], ["com.ss.android.ugc.aweme", "com.ss.android.article.video"], ["com.ss.android.ugc.aweme", "cn.kuwo.player"], ["com.taobao.taobao", "com.eg.android.AlipayGphone"], ["com.taobao.taobao", "com.autonavi.minimap"], ["com.taobao.taobao", "com.sina.weibo"], ["com.taobao.taobao", "com.UCMobile"], ["com.taobao.taobao", "com.sankuai.meituan"], ["com.taobao.taobao", "com.youku.phone"], ["com.taobao.taobao", "com.moji.mjweather"], ["com.taobao.taobao", "com.hunantv.imgo.activity"], ["com.taobao.taobao", "com.alibaba.android.rimet"], ["com.taobao.taobao", "tv.danmaku.bili"], ["com.taobao.taobao", "com.xingin.xhs"], ["com.sohu.inputmethod.sogou", "com.tencent.mm"], ["com.sohu.inputmethod.sogou", "com.tencent.mobileqq"], ["com.sohu.inputmethod.sogou", "com.xunmeng.pinduoduo"], ["com.sohu.inputmethod.sogou", "com.smile.gifmaker"], ["com.sohu.inputmethod.sogou", "com.tencent.mtt"], ["com.sohu.inputmethod.sogou", "com.tencent.qqlive"], ["com.sohu.inputmethod.sogou", "com.tencent.news"], ["com.sohu.inputmethod.sogou", "com.jingdong.app.mall"], ["com.sohu.inputmethod.sogou", "com.sankuai.meituan"], ["com.sohu.inputmethod.sogou", "com.tencent.qqmusic"], ["com.sohu.inputmethod.sogou", "cn.wps.moffice_eng"], ["com.sohu.inputmethod.sogou", "tv.danmaku.bili"], ["com.sohu.inputmethod.sogou", "cn.kuwo.player"], ["com.sohu.inputmethod.sogou", "com.tencent.qqpimsecure"], ["com.sohu.inputmethod.sogou", "com.tencent.wework"], ["com.sohu.inputmethod.sogou", "com.xingin.xhs"], ["com.tencent.mobileqq", "com.tencent.mm"], ["com.tencent.mobileqq", "com.sohu.inputmethod.sogou"], ["com.tencent.mobileqq", "com.xunmeng.pinduoduo"], ["com.tencent.mobileqq", "com.smile.gifmaker"], ["com.tencent.mobileqq", "com.tencent.mtt"], ["com.tencent.mobileqq", "com.tencent.qqlive"], ["com.tencent.mobileqq", "com.tencent.news"], ["com.tencent.mobileqq", "com.jingdong.app.mall"], ["com.tencent.mobileqq", "com.sankuai.meituan"], ["com.tencent.mobileqq", "com.tencent.qqmusic"], ["com.tencent.mobileqq", "cn.wps.moffice_eng"], ["com.tencent.mobileqq", "tv.danmaku.bili"], ["com.tencent.mobileqq", "cn.kuwo.player"], ["com.tencent.mobileqq", "com.tencent.qqpimsecure"], ["com.tencent.mobileqq", "com.tencent.wework"], ["com.tencent.mobileqq", "com.xingin.xhs"], ["com.eg.android.AlipayGphone", "com.taobao.taobao"], ["com.eg.android.AlipayGphone", "com.autonavi.minimap"], ["com.eg.android.AlipayGphone", "com.sina.weibo"], ["com.eg.android.AlipayGphone", "com.UCMobile"], ["com.eg.android.AlipayGphone", "com.sankuai.meituan"], ["com.eg.android.AlipayGphone", "com.youku.phone"], ["com.eg.android.AlipayGphone", "com.moji.mjweather"], ["com.eg.android.AlipayGphone", "com.hunantv.imgo.activity"], ["com.eg.android.AlipayGphone", "com.alibaba.android.rimet"], ["com.eg.android.AlipayGphone", "tv.danmaku.bili"], ["com.eg.android.AlipayGphone", "com.xingin.xhs"], ["com.baidu.searchbox", "com.baidu.input"], ["com.baidu.searchbox", "com.smile.gifmaker"], ["com.baidu.searchbox", "com.baidu.BaiduMap"], ["com.baidu.searchbox", "com.qiyi.video"], ["com.autonavi.minimap", "com.taobao.taobao"], ["com.autonavi.minimap", "com.eg.android.AlipayGphone"], ["com.autonavi.minimap", "com.sina.weibo"], ["com.autonavi.minimap", "com.UCMobile"], ["com.autonavi.minimap", "com.sankuai.meituan"], ["com.autonavi.minimap", "com.youku.phone"], ["com.autonavi.minimap", "com.moji.mjweather"], ["com.autonavi.minimap", "com.hunantv.imgo.activity"], ["com.autonavi.minimap", "com.alibaba.android.rimet"], ["com.autonavi.minimap", "tv.danmaku.bili"], ["com.autonavi.minimap", "com.xingin.xhs"], ["com.baidu.input", "com.baidu.searchbox"], ["com.baidu.input", "com.smile.gifmaker"], ["com.baidu.input", "com.baidu.BaiduMap"], ["com.baidu.input", "com.qiyi.video"], ["com.xunmeng.pinduoduo", "com.tencent.mm"], ["com.xunmeng.pinduoduo", "com.sohu.inputmethod.sogou"], ["com.xunmeng.pinduoduo", "com.tencent.mobileqq"], ["com.xunmeng.pinduoduo", "com.smile.gifmaker"], ["com.xunmeng.pinduoduo", "com.tencent.mtt"], ["com.xunmeng.pinduoduo", "com.tencent.qqlive"], ["com.xunmeng.pinduoduo", "com.tencent.news"], ["com.xunmeng.pinduoduo", "com.jingdong.app.mall"], ["com.xunmeng.pinduoduo", "com.sankuai.meituan"], ["com.xunmeng.pinduoduo", "com.tencent.qqmusic"], ["com.xunmeng.pinduoduo", "cn.wps.moffice_eng"], ["com.xunmeng.pinduoduo", "tv.danmaku.bili"], ["com.xunmeng.pinduoduo", "cn.kuwo.player"], ["com.xunmeng.pinduoduo", "com.tencent.qqpimsecure"], ["com.xunmeng.pinduoduo", "com.tencent.wework"], ["com.xunmeng.pinduoduo", "com.xingin.xhs"], ["com.smile.gifmaker", "com.tencent.mm"], ["com.smile.gifmaker", "com.sohu.inputmethod.sogou"], ["com.smile.gifmaker", "com.tencent.mobileqq"], ["com.smile.gifmaker", "com.baidu.searchbox"], ["com.smile.gifmaker", "com.baidu.input"], ["com.smile.gifmaker", "com.xunmeng.pinduoduo"], ["com.smile.gifmaker", "com.baidu.BaiduMap"], ["com.smile.gifmaker", "com.qiyi.video"], ["com.smile.gifmaker", "com.tencent.mtt"], ["com.smile.gifmaker", "com.tencent.qqlive"], ["com.smile.gifmaker", "com.tencent.news"], ["com.smile.gifmaker", "com.jingdong.app.mall"], ["com.smile.gifmaker", "com.sankuai.meituan"], ["com.smile.gifmaker", "com.tencent.qqmusic"], ["com.smile.gifmaker", "cn.wps.moffice_eng"], ["com.smile.gifmaker", "tv.danmaku.bili"], ["com.smile.gifmaker", "cn.kuwo.player"], ["com.smile.gifmaker", "com.tencent.qqpimsecure"], ["com.smile.gifmaker", "com.tencent.wework"], ["com.smile.gifmaker", "com.xingin.xhs"], ["com.sina.weibo", "com.ss.android.ugc.aweme"], ["com.sina.weibo", "com.taobao.taobao"], ["com.sina.weibo", "com.eg.android.AlipayGphone"], ["com.sina.weibo", "com.autonavi.minimap"], ["com.sina.weibo", "com.ss.android.article.news"], ["com.sina.weibo", "com.UCMobile"], ["com.sina.weibo", "com.sankuai.meituan"], ["com.sina.weibo", "com.youku.phone"], ["com.sina.weibo", "com.moji.mjweather"], ["com.sina.weibo", "com.hunantv.imgo.activity"], ["com.sina.weibo", "com.alibaba.android.rimet"], ["com.sina.weibo", "tv.danmaku.bili"], ["com.sina.weibo", "com.xingin.xhs"], ["com.baidu.BaiduMap", "com.baidu.searchbox"], ["com.baidu.BaiduMap", "com.baidu.input"], ["com.baidu.BaiduMap", "com.smile.gifmaker"], ["com.baidu.BaiduMap", "com.qiyi.video"], ["com.qiyi.video", "com.baidu.searchbox"], ["com.qiyi.video", "com.baidu.input"], ["com.qiyi.video", "com.smile.gifmaker"], ["com.qiyi.video", "com.baidu.BaiduMap"], ["com.qiyi.video", "com.UCMobile"], ["com.qiyi.video", "com.youku.phone"], ["com.tencent.mtt", "com.tencent.mm"], ["com.tencent.mtt", "com.sohu.inputmethod.sogou"], ["com.tencent.mtt", "com.tencent.mobileqq"], ["com.tencent.mtt", "com.xunmeng.pinduoduo"], ["com.tencent.mtt", "com.smile.gifmaker"], ["com.tencent.mtt", "com.tencent.qqlive"], ["com.tencent.mtt", "com.tencent.news"], ["com.tencent.mtt", "com.jingdong.app.mall"], ["com.tencent.mtt", "com.sankuai.meituan"], ["com.tencent.mtt", "com.tencent.qqmusic"], ["com.tencent.mtt", "cn.wps.moffice_eng"], ["com.tencent.mtt", "tv.danmaku.bili"], ["com.tencent.mtt", "cn.kuwo.player"], ["com.tencent.mtt", "com.tencent.qqpimsecure"], ["com.tencent.mtt", "com.tencent.wework"], ["com.tencent.mtt", "com.xingin.xhs"], ["com.ss.android.article.news", "com.ss.android.ugc.aweme"], ["com.ss.android.article.news", "com.sina.weibo"], ["com.ss.android.article.news", "com.ss.android.article.video"], ["com.ss.android.article.news", "cn.kuwo.player"], ["com.tencent.qqlive", "com.tencent.mm"], ["com.tencent.qqlive", "com.sohu.inputmethod.sogou"], ["com.tencent.qqlive", "com.tencent.mobileqq"], ["com.tencent.qqlive", "com.xunmeng.pinduoduo"], ["com.tencent.qqlive", "com.smile.gifmaker"], ["com.tencent.qqlive", "com.tencent.mtt"], ["com.tencent.qqlive", "com.tencent.news"], ["com.tencent.qqlive", "com.jingdong.app.mall"], ["com.tencent.qqlive", "com.sankuai.meituan"], ["com.tencent.qqlive", "com.tencent.qqmusic"], ["com.tencent.qqlive", "cn.wps.moffice_eng"], ["com.tencent.qqlive", "tv.danmaku.bili"], ["com.tencent.qqlive", "cn.kuwo.player"], ["com.tencent.qqlive", "com.tencent.qqpimsecure"], ["com.tencent.qqlive", "com.tencent.wework"], ["com.tencent.qqlive", "com.xingin.xhs"], ["com.UCMobile", "com.taobao.taobao"], ["com.UCMobile", "com.eg.android.AlipayGphone"], ["com.UCMobile", "com.autonavi.minimap"], ["com.UCMobile", "com.sina.weibo"], ["com.UCMobile", "com.qiyi.video"], ["com.UCMobile", "com.sankuai.meituan"], ["com.UCMobile", "com.youku.phone"], ["com.UCMobile", "com.moji.mjweather"], ["com.UCMobile", "com.hunantv.imgo.activity"], ["com.UCMobile", "com.alibaba.android.rimet"], ["com.UCMobile", "tv.danmaku.bili"], ["com.UCMobile", "com.xingin.xhs"], ["com.tencent.news", "com.tencent.mm"], ["com.tencent.news", "com.sohu.inputmethod.sogou"], ["com.tencent.news", "com.tencent.mobileqq"], ["com.tencent.news", "com.xunmeng.pinduoduo"], ["com.tencent.news", "com.smile.gifmaker"], ["com.tencent.news", "com.tencent.mtt"], ["com.tencent.news", "com.tencent.qqlive"], ["com.tencent.news", "com.jingdong.app.mall"], ["com.tencent.news", "com.sankuai.meituan"], ["com.tencent.news", "com.tencent.qqmusic"], ["com.tencent.news", "cn.wps.moffice_eng"], ["com.tencent.news", "tv.danmaku.bili"], ["com.tencent.news", "cn.kuwo.player"], ["com.tencent.news", "com.tencent.qqpimsecure"], ["com.tencent.news", "com.tencent.wework"], ["com.tencent.news", "com.xingin.xhs"], ["com.jingdong.app.mall", "com.tencent.mm"], ["com.jingdong.app.mall", "com.sohu.inputmethod.sogou"], ["com.jingdong.app.mall", "com.tencent.mobileqq"], ["com.jingdong.app.mall", "com.xunmeng.pinduoduo"], ["com.jingdong.app.mall", "com.smile.gifmaker"], ["com.jingdong.app.mall", "com.tencent.mtt"], ["com.jingdong.app.mall", "com.tencent.qqlive"], ["com.jingdong.app.mall", "com.tencent.news"], ["com.jingdong.app.mall", "com.sankuai.meituan"], ["com.jingdong.app.mall", "com.tencent.qqmusic"], ["com.jingdong.app.mall", "cn.wps.moffice_eng"], ["com.jingdong.app.mall", "tv.danmaku.bili"], ["com.jingdong.app.mall", "cn.kuwo.player"], ["com.jingdong.app.mall", "com.tencent.qqpimsecure"], ["com.jingdong.app.mall", "com.tencent.wework"], ["com.jingdong.app.mall", "com.xingin.xhs"], ["com.sankuai.meituan", "com.tencent.mm"], ["com.sankuai.meituan", "com.taobao.taobao"], ["com.sankuai.meituan", "com.sohu.inputmethod.sogou"], ["com.sankuai.meituan", "com.tencent.mobileqq"], ["com.sankuai.meituan", "com.eg.android.AlipayGphone"], ["com.sankuai.meituan", "com.autonavi.minimap"], ["com.sankuai.meituan", "com.xunmeng.pinduoduo"], ["com.sankuai.meituan", "com.smile.gifmaker"], ["com.sankuai.meituan", "com.sina.weibo"], ["com.sankuai.meituan", "com.tencent.mtt"], ["com.sankuai.meituan", "com.tencent.qqlive"], ["com.sankuai.meituan", "com.UCMobile"], ["com.sankuai.meituan", "com.tencent.news"], ["com.sankuai.meituan", "com.jingdong.app.mall"], ["com.sankuai.meituan", "com.tencent.qqmusic"], ["com.sankuai.meituan", "com.youku.phone"], ["com.sankuai.meituan", "com.moji.mjweather"], ["com.sankuai.meituan", "cn.wps.moffice_eng"], ["com.sankuai.meituan", "com.hunantv.imgo.activity"], ["com.sankuai.meituan", "com.alibaba.android.rimet"], ["com.sankuai.meituan", "tv.danmaku.bili"], ["com.sankuai.meituan", "cn.kuwo.player"], ["com.sankuai.meituan", "com.tencent.qqpimsecure"], ["com.sankuai.meituan", "com.tencent.wework"], ["com.sankuai.meituan", "com.xingin.xhs"], ["com.tencent.qqmusic", "com.tencent.mm"], ["com.tencent.qqmusic", "com.sohu.inputmethod.sogou"], ["com.tencent.qqmusic", "com.tencent.mobileqq"], ["com.tencent.qqmusic", "com.xunmeng.pinduoduo"], ["com.tencent.qqmusic", "com.smile.gifmaker"], ["com.tencent.qqmusic", "com.tencent.mtt"], ["com.tencent.qqmusic", "com.tencent.qqlive"], ["com.tencent.qqmusic", "com.tencent.news"], ["com.tencent.qqmusic", "com.jingdong.app.mall"], ["com.tencent.qqmusic", "com.sankuai.meituan"], ["com.tencent.qqmusic", "cn.wps.moffice_eng"], ["com.tencent.qqmusic", "tv.danmaku.bili"], ["com.tencent.qqmusic", "cn.kuwo.player"], ["com.tencent.qqmusic", "com.tencent.qqpimsecure"], ["com.tencent.qqmusic", "com.tencent.wework"], ["com.tencent.qqmusic", "com.xingin.xhs"], ["com.youku.phone", "com.taobao.taobao"], ["com.youku.phone", "com.eg.android.AlipayGphone"], ["com.youku.phone", "com.autonavi.minimap"], ["com.youku.phone", "com.sina.weibo"], ["com.youku.phone", "com.qiyi.video"], ["com.youku.phone", "com.UCMobile"], ["com.youku.phone", "com.sankuai.meituan"], ["com.youku.phone", "com.moji.mjweather"], ["com.youku.phone", "com.hunantv.imgo.activity"], ["com.youku.phone", "com.alibaba.android.rimet"], ["com.youku.phone", "tv.danmaku.bili"], ["com.youku.phone", "com.xingin.xhs"], ["com.moji.mjweather", "com.taobao.taobao"], ["com.moji.mjweather", "com.eg.android.AlipayGphone"], ["com.moji.mjweather", "com.autonavi.minimap"], ["com.moji.mjweather", "com.sina.weibo"], ["com.moji.mjweather", "com.UCMobile"], ["com.moji.mjweather", "com.sankuai.meituan"], ["com.moji.mjweather", "com.youku.phone"], ["com.moji.mjweather", "com.hunantv.imgo.activity"], ["com.moji.mjweather", "com.alibaba.android.rimet"], ["com.moji.mjweather", "tv.danmaku.bili"], ["com.moji.mjweather", "com.xingin.xhs"], ["cn.wps.moffice_eng", "com.tencent.mm"], ["cn.wps.moffice_eng", "com.sohu.inputmethod.sogou"], ["cn.wps.moffice_eng", "com.tencent.mobileqq"], ["cn.wps.moffice_eng", "com.xunmeng.pinduoduo"], ["cn.wps.moffice_eng", "com.smile.gifmaker"], ["cn.wps.moffice_eng", "com.tencent.mtt"], ["cn.wps.moffice_eng", "com.tencent.qqlive"], ["cn.wps.moffice_eng", "com.tencent.news"], ["cn.wps.moffice_eng", "com.jingdong.app.mall"], ["cn.wps.moffice_eng", "com.sankuai.meituan"], ["cn.wps.moffice_eng", "com.tencent.qqmusic"], ["cn.wps.moffice_eng", "tv.danmaku.bili"], ["cn.wps.moffice_eng", "cn.kuwo.player"], ["cn.wps.moffice_eng", "com.tencent.qqpimsecure"], ["cn.wps.moffice_eng", "com.greenpoint.android.mc10086.activity"], ["cn.wps.moffice_eng", "com.tencent.wework"], ["cn.wps.moffice_eng", "com.iflytek.inputmethod"], ["cn.wps.moffice_eng", "com.xingin.xhs"], ["com.hunantv.imgo.activity", "com.taobao.taobao"], ["com.hunantv.imgo.activity", "com.eg.android.AlipayGphone"], ["com.hunantv.imgo.activity", "com.autonavi.minimap"], ["com.hunantv.imgo.activity", "com.sina.weibo"], ["com.hunantv.imgo.activity", "com.UCMobile"], ["com.hunantv.imgo.activity", "com.sankuai.meituan"], ["com.hunantv.imgo.activity", "com.youku.phone"], ["com.hunantv.imgo.activity", "com.moji.mjweather"], ["com.hunantv.imgo.activity", "com.alibaba.android.rimet"], ["com.hunantv.imgo.activity", "tv.danmaku.bili"], ["com.hunantv.imgo.activity", "com.xingin.xhs"], ["com.alibaba.android.rimet", "com.taobao.taobao"], ["com.alibaba.android.rimet", "com.eg.android.AlipayGphone"], ["com.alibaba.android.rimet", "com.autonavi.minimap"], ["com.alibaba.android.rimet", "com.sina.weibo"], ["com.alibaba.android.rimet", "com.UCMobile"], ["com.alibaba.android.rimet", "com.sankuai.meituan"], ["com.alibaba.android.rimet", "com.youku.phone"], ["com.alibaba.android.rimet", "com.moji.mjweather"], ["com.alibaba.android.rimet", "com.hunantv.imgo.activity"], ["com.alibaba.android.rimet", "tv.danmaku.bili"], ["com.alibaba.android.rimet", "com.xingin.xhs"], ["tv.danmaku.bili", "com.tencent.mm"], ["tv.danmaku.bili", "com.taobao.taobao"], ["tv.danmaku.bili", "com.sohu.inputmethod.sogou"], ["tv.danmaku.bili", "com.tencent.mobileqq"], ["tv.danmaku.bili", "com.eg.android.AlipayGphone"], ["tv.danmaku.bili", "com.autonavi.minimap"], ["tv.danmaku.bili", "com.xunmeng.pinduoduo"], ["tv.danmaku.bili", "com.smile.gifmaker"], ["tv.danmaku.bili", "com.sina.weibo"], ["tv.danmaku.bili", "com.tencent.mtt"], ["tv.danmaku.bili", "com.tencent.qqlive"], ["tv.danmaku.bili", "com.UCMobile"], ["tv.danmaku.bili", "com.tencent.news"], ["tv.danmaku.bili", "com.jingdong.app.mall"], ["tv.danmaku.bili", "com.sankuai.meituan"], ["tv.danmaku.bili", "com.tencent.qqmusic"], ["tv.danmaku.bili", "com.youku.phone"], ["tv.danmaku.bili", "com.moji.mjweather"], ["tv.danmaku.bili", "cn.wps.moffice_eng"], ["tv.danmaku.bili", "com.hunantv.imgo.activity"], ["tv.danmaku.bili", "com.alibaba.android.rimet"], ["tv.danmaku.bili", "cn.kuwo.player"], ["tv.danmaku.bili", "com.tencent.qqpimsecure"], ["tv.danmaku.bili", "com.tencent.wework"], ["tv.danmaku.bili", "com.xingin.xhs"], ["com.ss.android.article.video", "com.ss.android.ugc.aweme"], ["com.ss.android.article.video", "com.ss.android.article.news"], ["cn.kuwo.player", "com.tencent.mm"], ["cn.kuwo.player", "com.ss.android.ugc.aweme"], ["cn.kuwo.player", "com.sohu.inputmethod.sogou"], ["cn.kuwo.player", "com.tencent.mobileqq"], ["cn.kuwo.player", "com.xunmeng.pinduoduo"], ["cn.kuwo.player", "com.smile.gifmaker"], ["cn.kuwo.player", "com.tencent.mtt"], ["cn.kuwo.player", "com.ss.android.article.news"], ["cn.kuwo.player", "com.tencent.qqlive"], ["cn.kuwo.player", "com.tencent.news"], ["cn.kuwo.player", "com.jingdong.app.mall"], ["cn.kuwo.player", "com.sankuai.meituan"], ["cn.kuwo.player", "com.tencent.qqmusic"], ["cn.kuwo.player", "cn.wps.moffice_eng"], ["cn.kuwo.player", "tv.danmaku.bili"], ["cn.kuwo.player", "com.tencent.qqpimsecure"], ["cn.kuwo.player", "com.tencent.wework"], ["cn.kuwo.player", "com.xingin.xhs"], ["com.tencent.qqpimsecure", "com.tencent.mm"], ["com.tencent.qqpimsecure", "com.sohu.inputmethod.sogou"], ["com.tencent.qqpimsecure", "com.tencent.mobileqq"], ["com.tencent.qqpimsecure", "com.xunmeng.pinduoduo"], ["com.tencent.qqpimsecure", "com.smile.gifmaker"], ["com.tencent.qqpimsecure", "com.tencent.mtt"], ["com.tencent.qqpimsecure", "com.tencent.qqlive"], ["com.tencent.qqpimsecure", "com.tencent.news"], ["com.tencent.qqpimsecure", "com.jingdong.app.mall"], ["com.tencent.qqpimsecure", "com.sankuai.meituan"], ["com.tencent.qqpimsecure", "com.tencent.qqmusic"], ["com.tencent.qqpimsecure", "cn.wps.moffice_eng"], ["com.tencent.qqpimsecure", "tv.danmaku.bili"], ["com.tencent.qqpimsecure", "cn.kuwo.player"], ["com.tencent.qqpimsecure", "com.tencent.wework"], ["com.tencent.qqpimsecure", "com.xingin.xhs"], ["com.greenpoint.android.mc10086.activity", "cn.wps.moffice_eng"], ["com.greenpoint.android.mc10086.activity", "com.iflytek.inputmethod"], ["com.tencent.wework", "com.tencent.mm"], ["com.tencent.wework", "com.sohu.inputmethod.sogou"], ["com.tencent.wework", "com.tencent.mobileqq"], ["com.tencent.wework", "com.xunmeng.pinduoduo"], ["com.tencent.wework", "com.smile.gifmaker"], ["com.tencent.wework", "com.tencent.mtt"], ["com.tencent.wework", "com.tencent.qqlive"], ["com.tencent.wework", "com.tencent.news"], ["com.tencent.wework", "com.jingdong.app.mall"], ["com.tencent.wework", "com.sankuai.meituan"], ["com.tencent.wework", "com.tencent.qqmusic"], ["com.tencent.wework", "cn.wps.moffice_eng"], ["com.tencent.wework", "tv.danmaku.bili"], ["com.tencent.wework", "cn.kuwo.player"], ["com.tencent.wework", "com.tencent.qqpimsecure"], ["com.tencent.wework", "com.xingin.xhs"], ["com.iflytek.inputmethod", "cn.wps.moffice_eng"], ["com.iflytek.inputmethod", "com.greenpoint.android.mc10086.activity"], ["com.xingin.xhs", "com.tencent.mm"], ["com.xingin.xhs", "com.taobao.taobao"], ["com.xingin.xhs", "com.sohu.inputmethod.sogou"], ["com.xingin.xhs", "com.tencent.mobileqq"], ["com.xingin.xhs", "com.eg.android.AlipayGphone"], ["com.xingin.xhs", "com.autonavi.minimap"], ["com.xingin.xhs", "com.xunmeng.pinduoduo"], ["com.xingin.xhs", "com.smile.gifmaker"], ["com.xingin.xhs", "com.sina.weibo"], ["com.xingin.xhs", "com.tencent.mtt"], ["com.xingin.xhs", "com.tencent.qqlive"], ["com.xingin.xhs", "com.UCMobile"], ["com.xingin.xhs", "com.tencent.news"], ["com.xingin.xhs", "com.jingdong.app.mall"], ["com.xingin.xhs", "com.sankuai.meituan"], ["com.xingin.xhs", "com.tencent.qqmusic"], ["com.xingin.xhs", "com.youku.phone"], ["com.xingin.xhs", "com.moji.mjweather"], ["com.xingin.xhs", "cn.wps.moffice_eng"], ["com.xingin.xhs", "com.hunantv.imgo.activity"], ["com.xingin.xhs", "com.alibaba.android.rimet"], ["com.xingin.xhs", "tv.danmaku.bili"], ["com.xingin.xhs", "cn.kuwo.player"], ["com.xingin.xhs", "com.tencent.qqpimsecure"], ["com.xingin.xhs", "com.tencent.wework"]];
+        const inDegInterop = [24, 10, 4, 0, 21, 22, 4, 7, 0, 2, 5, 17, 6, 0, 3, 1, 1, 3, 1, 2, 2, 1, 2, 0, 0, 0, 0, 6, 3, 2, 0, 2, 1, 3, 0, 4];
+        const outDegInterop = [16, 9, 12, 5, 0, 0, 3, 5, 7, 3, 8, 0, 3, 2, 0, 5, 3, 5, 1, 6, 5, 1, 7, 4, 6, 3, 0, 9, 2, 5, 0, 0, 1, 7, 6, 10];
+        const inDegOwnership = [16, 4, 11, 16, 16, 11, 4, 11, 4, 16, 20, 13, 4, 6, 16, 4, 16, 12, 16, 16, 25, 16, 12, 11, 18, 11, 0, 11, 25, 2, 18, 16, 2, 16, 2, 25];
+        const outDegOwnership = [16, 4, 11, 16, 16, 11, 4, 11, 4, 16, 20, 13, 4, 6, 16, 4, 16, 12, 16, 16, 25, 16, 12, 11, 18, 11, 0, 11, 25, 2, 18, 16, 2, 16, 2, 25];
+        // Current state
+        let currentLanguage = 'chinese';
+        let currentLayout = 'ownership';
+        let currentNetwork = 'interop';
+        let selectedNode = null;
+        function getEdgeTraces(positions, edgesArg, highlightEdges = null) {
+            const baseX = [];
+            const baseY = [];
+            const hiX = [];
+            const hiY = [];
+            edgesArg.forEach((edge, idx) => {
+                const fromIdx = nodeIndices[edge[0]];
+                const toIdx = nodeIndices[edge[1]];
+                const x0 = positions[fromIdx][0];
+                const y0 = positions[fromIdx][1];
+                const x1 = positions[toIdx][0];
+                const y1 = positions[toIdx][1];
+                // base
+                baseX.push(x0, x1, null);
+                baseY.push(y0, y1, null);
+                // highlight
+                if (highlightEdges && highlightEdges.has(idx)) {
+                    hiX.push(x0, x1, null);
+                    hiY.push(y0, y1, null);
+                }
+            });
+            const baseTrace = {
+                name: 'edges-base',
+                x: baseX,
+                y: baseY,
+                mode: 'lines',
+                line: { width: 0.5, color: 'rgba(150,150,150,0.3)' },
+                hoverinfo: 'none',
+                showlegend: false
+            };
+            const hiTrace = {
+                name: 'edges-highlight',
+                x: hiX,
+                y: hiY,
+                mode: 'lines',
+                line: { width: 2, color: 'red' },
+                hoverinfo: 'none',
+                showlegend: false
+            };
+            return [baseTrace, hiTrace];
+        }
+        function getNodeTrace(positions, labels, nodeClasses = null) {
+            const nodeX = positions.map(p => p[0]);
+            const nodeY = positions.map(p => p[1]);
+            const nodeColors = nodes.map((node, idx) => {
+                const inH = nodeClasses && nodeClasses.in && nodeClasses.in.has(idx);
+                const outH = nodeClasses && nodeClasses.out && nodeClasses.out.has(idx);
+                const biH = nodeClasses && nodeClasses.bi && nodeClasses.bi.has(idx);
+                if (selectedNode === idx) return '#FF9800';
+                if (biH) return '#8e44ad';
+                if (inH) return '#2ecc71';
+                if (outH) return '#e74c3c';
+                return 'lightblue';
+            });
+            const nodeSizesAdjusted = nodes.map((node, idx) => {
+                const inH = nodeClasses && nodeClasses.in && nodeClasses.in.has(idx);
+                const outH = nodeClasses && nodeClasses.out && nodeClasses.out.has(idx);
+                const biH = nodeClasses && nodeClasses.bi && nodeClasses.bi.has(idx);
+                if (selectedNode === idx) return nodeSizes[idx] * 1.5;
+                if (inH || outH || biH) return nodeSizes[idx] * 1.2;
+                return nodeSizes[idx];
+            });
+            const hoverTexts = nodes.map(function(node, idx) {
+                var nm = labels[idx];
+                var inDeg = (currentNetwork === 'ownership' ? inDegOwnership[idx] : inDegInterop[idx]);
+                var outDeg = (currentNetwork === 'ownership' ? outDegOwnership[idx] : outDegInterop[idx]);
+                return '<b>' + nm + '</b><br>In-degree: ' + inDeg + '<br>Out-degree: ' + outDeg + '<br>Click to highlight connections';
+            });
+            return {
+                x: nodeX,
+                y: nodeY,
+                mode: 'markers+text',
+                marker: {
+                    size: nodeSizesAdjusted,
+                    color: nodeColors,
+                    line: {
+                        color: 'white',
+                        width: 2
+                    }
+                },
+                text: labels,
+                textposition: 'top center',
+                textfont: {
+                    size: 10,
+                    color: 'black'
+                },
+                hovertext: hoverTexts,
+                hoverinfo: 'text',
+                showlegend: false
+            };
+        }
+        function updateGraph() {
+            const positions = currentLayout === 'ownership' ? posOwnership : posInterop;
+            const labels = currentLanguage === 'chinese' ? labelsChinese : labelsEnglish;
+            const edgesCurrent = currentNetwork === 'ownership' ? edgesOwnership : edgesInterop;
+            let data = [];
+            let nodeClasses = null;
+            // Build base edges trace first
+            // For interoperability network, when a node is selected, split into in/out/bi traces
+            if (currentNetwork === 'interop' && selectedNode !== null) {
+                const sName = nodes[selectedNode];
+                const key = (a,b) => a + '||' + b;
+                const pairToIndex = new Map();
+                for (let i=0;i<edgesCurrent.length;i++) {
+                    const e = edgesCurrent[i];
+                    pairToIndex.set(key(e[0], e[1]), i);
+                }
+                const inSet = new Set();
+                const outSet = new Set();
+                const inNodesSet = new Set();
+                const outNodesSet = new Set();
+                for (let i=0;i<edgesCurrent.length;i++) {
+                    const e = edgesCurrent[i];
+                    if (e[1] === sName) {
+                        inSet.add(i);
+                        inNodesSet.add(nodeIndices[e[0]]);
+                    }
+                    if (e[0] === sName) {
+                        outSet.add(i);
+                        outNodesSet.add(nodeIndices[e[1]]);
+                    }
+                }
+                const biSet = new Set();
+                const biNodesSet = new Set();
+                for (const idx of Array.from(outSet)) {
+                    const nb = edgesCurrent[idx][1];
+                    const revIdx = pairToIndex.get(key(nb, sName));
+                    if (revIdx !== undefined && inSet.has(revIdx)) {
+                        biSet.add(idx);
+                        biSet.add(revIdx);
+                        outSet.delete(idx);
+                        inSet.delete(revIdx);
+                        biNodesSet.add(nodeIndices[nb]);
+                    }
+                }
+                // Remove bi nodes from in/out sets
+                for (const bi of Array.from(biNodesSet)) {
+                    inNodesSet.delete(bi);
+                    outNodesSet.delete(bi);
+                }
+                const [baseTrace, inTrace, outTrace, biTrace] = (function() {
+                    // Build edge traces
+                    const baseX = []; const baseY = [];
+                    const inX = []; const inY = [];
+                    const outX = []; const outY = [];
+                    const biX = []; const biY = [];
+                    for (let i=0;i<edgesCurrent.length;i++) {
+                        const e = edgesCurrent[i];
+                        const fromIdx = nodeIndices[e[0]]; const toIdx = nodeIndices[e[1]];
+                        const x0 = positions[fromIdx][0]; const y0 = positions[fromIdx][1];
+                        const x1 = positions[toIdx][0]; const y1 = positions[toIdx][1];
+                        if (biSet.has(i)) { biX.push(x0,x1,null); biY.push(y0,y1,null); continue; }
+                        if (inSet.has(i)) { inX.push(x0,x1,null); inY.push(y0,y1,null); continue; }
+                        if (outSet.has(i)) { outX.push(x0,x1,null); outY.push(y0,y1,null); continue; }
+                        baseX.push(x0,x1,null); baseY.push(y0,y1,null);
+                    }
+                    const baseTrace = { name: 'edges-base', x: baseX, y: baseY, mode: 'lines', line: { width: 0.5, color: 'rgba(150,150,150,0.3)' }, hoverinfo: 'none', showlegend: false };
+                    const inTrace = { name: 'edges-in', x: inX, y: inY, mode: 'lines', line: { width: 2, color: '#2ecc71' }, hoverinfo: 'none', showlegend: false };
+                    const outTrace = { name: 'edges-out', x: outX, y: outY, mode: 'lines', line: { width: 2, color: '#e74c3c' }, hoverinfo: 'none', showlegend: false };
+                    const biTrace = { name: 'edges-bi', x: biX, y: biY, mode: 'lines', line: { width: 2, color: '#8e44ad' }, hoverinfo: 'none', showlegend: false };
+                    return [baseTrace, inTrace, outTrace, biTrace];
+                })();
+                nodeClasses = { in: inNodesSet, out: outNodesSet, bi: biNodesSet };
+                const nodeTrace = getNodeTrace(positions, labels, nodeClasses); nodeTrace.name = 'nodes';
+                data = [baseTrace, inTrace, outTrace, biTrace, nodeTrace];
+            } else {
+                // Non-directed highlight fallback (ownership network or no selection)
+                let highlightEdges = null;
+                if (selectedNode !== null) {
+                    highlightEdges = new Set();
+                    edgesCurrent.forEach((edge, idx) => {
+                        const fromIdx = nodeIndices[edge[0]];
+                        const toIdx = nodeIndices[edge[1]];
+                        if (fromIdx === selectedNode || toIdx === selectedNode) highlightEdges.add(idx);
+                    });
+                }
+                const [edgeTraceBase, edgeTraceHi] = getEdgeTraces(positions, edgesCurrent, highlightEdges);
+                const nodeTrace = getNodeTrace(positions, labels, null); nodeTrace.name = 'nodes';
+                data = [edgeTraceBase, edgeTraceHi, nodeTrace];
+            }
+            const layout = {
+                title: '',
+                showlegend: false,
+                hovermode: 'closest',
+                margin: { t: 0, b: 0, l: 0, r: 0 },
+                xaxis: { showgrid: false, zeroline: false, showticklabels: false },
+                yaxis: { showgrid: false, zeroline: false, showticklabels: false },
+                plot_bgcolor: 'white',
+                height: 800
+            };
+            const config = {
+                responsive: true,
+                displayModeBar: true,
+                displaylogo: false
+            };
+            Plotly.newPlot('graph', data, layout, config);
+            // Add click event
+            document.getElementById('graph').on('plotly_click', function(data) {
+                const traceName = data.points[0]?.fullData?.name;
+                if (!traceName || traceName === 'nodes') { // only react on node clicks
+                    const pointIndex = data.points[0].pointIndex;
+                    if (selectedNode === pointIndex) {
+                        selectedNode = null;
+                    } else {
+                        selectedNode = pointIndex;
+                    }
+                    updateGraph();
+                }
+            });
+        }
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            document.getElementById('btn-chinese').classList.toggle('active', lang === 'chinese');
+            document.getElementById('btn-english').classList.toggle('active', lang === 'english');
+            updateGraph();
+        }
+        function switchLayout(layout) {
+            currentLayout = layout;
+            document.getElementById('btn-ownership').classList.toggle('active', layout === 'ownership');
+            document.getElementById('btn-interop').classList.toggle('active', layout === 'interop');
+            updateGraph();
+        }
+        function switchNetwork(net) {
+            currentNetwork = net;
+            document.getElementById('btn-net-interop').classList.toggle('active', net === 'interop');
+            document.getElementById('btn-net-ownership').classList.toggle('active', net === 'ownership');
+            updateGraph();
+        }
+        function resetHighlight() {
+            selectedNode = null;
+            updateGraph();
+        }
+        // Initial render
+        updateGraph();
+    </script>
+</body>
+</html>
