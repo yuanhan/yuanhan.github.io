@@ -21,6 +21,7 @@ Official Website: https://cob.sufe.edu.cn/Teacher/Detail/236
 ** Research Interests
 Industrial Organization, Quantitative Marketing, Digital Economy
 
+Content Platforms, Mobile Applications
 ** Employment
 - 2023.8-Current Assistant Professor, College of Business, Shanghai University of Finance and Economics
 - 2021.7–2023.7  Assistant Professor, School of Business, Sun Yat-sen University
@@ -35,12 +36,12 @@ Industrial Organization, Quantitative Marketing, Digital Economy
 2. Yuan, Han. (2016). [[./files/Yuan - 2016 - Measuring media bias in China.pdf][Measuring Media Bias in China]]. China Economic Review, 38, pp. 49-59
 
 ** Working Papers
-1. Competing for Time: A Study of Mobile Applications (Revise & Resubmit at International Journal of Industrial Organization)
+1. Competing for Time: A Study of Mobile Applications (conditionally accepted by International Journal of Industrial Organization)
 2. Editorial Recommendations and Product Discovery: Evidence from Apple App Store (with Duan Keran, Zhang Xi) (draft available upon request)
 3. The Impacts and Cultural Implications of Movie Recap Videos (with Yuxin Chen, Wenyu Dou, Jintao Wu) (2025 AMA Summer Academic Conference, Best in Track Paper "Innovation and Inclusivity")
 
 ** Research in Progress
 1. Content Curation (with Yuxin Chen, Wenyu Dou, Jintao Wu)
-2. Interoperability (With Jian Xie and Ao Wang; [[./files/io_network.html][an interactive interoperability network]])
+2. Interoperability (with Jian Xie and Ao Wang; [[./files/io_network.html][an interactive interoperability network]])
 
 [[./files/cv.pdf][CV]]
