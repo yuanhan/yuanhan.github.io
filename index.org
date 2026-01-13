@@ -32,13 +32,13 @@ Content Platforms, Mobile Applications
 - 2014-2016, MPhil in Economics, The Chinese University of Hong Kong
 - 2010-2014, BSc in Economics, Zhejiang University
 ** Publication
-1. Xiao, Mo and Yuan, Han. (2023) [[./files/政策驱动型创新——来自中国的研究.pdf][Policy-Driven Innovation: The Case of China]]. Quarterly Journal of Economics and Management (《经济管理学刊》)
-2. Yuan, Han. (2016). [[./files/Yuan - 2016 - Measuring media bias in China.pdf][Measuring Media Bias in China]]. China Economic Review, 38, pp. 49-59
+1. Yuan, Han. (2026) [[./files/competing_for_time_Han_published.pdf][Competing for time: A study of mobile applications]]. International Journal of Industrial Organization, Volume 105
+2. Xiao, Mo and Yuan, Han. (2023) [[./files/政策驱动型创新——来自中国的研究.pdf][Policy-Driven Innovation: The Case of China]]. Quarterly Journal of Economics and Management (《经济管理学刊》)
+3. Yuan, Han. (2016). [[./files/Yuan - 2016 - Measuring media bias in China.pdf][Measuring Media Bias in China]]. China Economic Review, 38, pp. 49-59
 
 ** Working Papers
-1. Competing for Time: A Study of Mobile Applications (conditionally accepted by International Journal of Industrial Organization)
-2. Editorial Recommendations and Product Discovery: Evidence from Apple App Store (with Duan Keran, Zhang Xi) (draft available upon request)
-3. The Impacts and Cultural Implications of Movie Recap Videos (with Yuxin Chen, Wenyu Dou, Jintao Wu) (2025 AMA Summer Academic Conference, Best in Track Paper "Innovation and Inclusivity")
+1. Editorial Recommendations and Product Discovery: Evidence from Apple App Store (with Duan Keran, Zhang Xi) (draft available upon request)
+2. The Impacts and Cultural Implications of Movie Recap Videos (with Yuxin Chen, Wenyu Dou, Jintao Wu) (2025 AMA Summer Academic Conference, Best in Track Paper "Innovation and Inclusivity")
 
 ** Research in Progress
 1. Content Curation (with Yuxin Chen, Wenyu Dou, Jintao Wu)
