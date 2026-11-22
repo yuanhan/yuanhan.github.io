@@ -39,9 +39,8 @@ Content Platforms, Mobile Applications
 ** Working Papers
 1. Editorial Recommendations and Product Discovery: Evidence from Apple App Store (with Duan Keran, Zhang Xi) (draft available upon request)
 2. The Impacts and Cultural Implications of Movie Recap Videos (with Yuxin Chen, Wenyu Dou, Jintao Wu) (2025 AMA Summer Academic Conference, Best in Track Paper "Innovation and Inclusivity")
-
+3. [[./files/Digital_interoperability.pdf][Digital Interoperability: Measurement, Incentives, and Welfare]] (With Ao Wang, Jian Xie) ([[https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7736638][SSRN link]] ; [[./files/io_network.html][an interactive interoperability network]])
 ** Research in Progress
 1. Content Curation (with Yuxin Chen, Wenyu Dou, Jintao Wu)
-2. Interoperability (with Jian Xie and Ao Wang; [[./files/io_network.html][an interactive interoperability network]])
-
+2. General-Purpose AI and the App Ecosystem: Early Evidence from the DeepSeek Moment (with Ruobing Han, Lu Cao)
 [[./files/cv.pdf][CV]]
